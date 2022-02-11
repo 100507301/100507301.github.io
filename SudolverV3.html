@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sudolver</title>
+    <link rel="stylesheet" href="SudokuSolver_CSS.css">
+  </head>
+  <body>
+    <div id="parent">
+      <div id="titleBar">
+        <h1 id="title">Sudoku Solver</h1>  
+      </div>
+      <div id="page">
+        <div class="sideBox" style="border-right: 5px solid black; padding-right: 50px;">
+          <h2 style="text-align: center;">Rules of Sudoku</h2>
+          <ol>
+            <li>One number per cell</li>
+            <li>One instance of any one number from 1 - 9 in a row</li>
+            <li>One instance of any one number from 1 - 9 in a column</li>
+            <li>One instance of any one number from 1 - 9 in a 3 x 3 box</li>
+          </ol>
+          <h2 style="text-align: center;"> Rules for this Solver</h2>
+          <ol>
+            <li>Hit the generate button and your chosen difficulty to generate a random Sudoku puzzle of that difficulty</li></br>
+            <li>Click on the cell you wish to change to alter it</li></br>
+            <li>Click on the number you want to put in the selected cell</li></br>
+            <li>When a number is selected it will also highlight the same number across the board</li></br>
+            <li>Click the compare solution button to check your answer against the solution for a randomly generated puzzle</li></br>
+            <li>Click the check button in order to check if an entered puzzle has one unique solution (you can use this on generated puzzles however using the same logic the puzzle will only be printed if there is only one unique solution)</li></br>
+            <li>Click the solve button to print the solution to a generated or an entered puzzle</li></br>
+            <li>You can change the grid size with the puzzle size buttons</li></br>
+          </ol>
+        </div>
+        <div id="box">
+          <div id="boardAndButtons">
+            <div class="groupButtons">
+              <button class="button" type="button" onclick="checkSolution()">Compare Solution</button>
+              <button class="button" type="button" onclick="checkBoard()">Check</button>
+              <button class="button" type="button" onclick="solveSudoku()">Solve</button>
+            </div>
+            <div id="container"></div>
+            <div id="numberButtonDiv" class="groupButtons">
+              <button onclick="addNumber(1)">1</button>
+              <button onclick="addNumber(2)">2</button>
+              <button onclick="addNumber(3)">3</button>
+              <button onclick="addNumber(4)">4</button>
+              <button onclick="addNumber(5)">5</button>
+              <button onclick="addNumber(6)">6</button>
+              <button onclick="addNumber(7)">7</button>
+              <button onclick="addNumber(8)">8</button>
+              <button onclick="addNumber(9)">9</button>
+            </div>
+            <button onclick="undo()">Undo</button>
+            <button onclick="reset()">Reset</button>
+          </div>
+        </div>
+        <div class="sideBox" style="border-left: 5px solid black;">
+          <h2 style="text-align: center;">Generate Puzzles</h2>
+          <div id="generateButtons">
+            <a onclick="generatePuzzle(0)">Easy</a>
+            <a onclick="generatePuzzle(1)">Medium</a>
+            <a onclick="generatePuzzle(2)">Hard</a>
+          </div>
+          <h2 style="text-align: center;">Puzzle Size</h2>
+          <div id="generateButtons">
+            <a onclick="generateGridSize(0)">4 X 4</a>
+            <a onclick="generateGridSize(1)">9 X 9</a>
+            <a onclick="generateGridSize(2)">16 X 16</a>
+          </div>
+        </div>
+      </div>  
+    </div>   
+    <script src="graphColouringSolver.js"></script>
+  </body>
+</html>

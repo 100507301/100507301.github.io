@@ -1,0 +1,212 @@
+body, html{
+  height: 100%;
+  margin: 0;      /* This resets any browser defaults */
+  padding: 0;
+  background-color: lightgrey;
+}
+
+/* Sudoku box */
+#boxContainer{
+  height: 100%;
+  width: 100%;
+}
+
+#containerSmall{
+  display: block;
+}
+
+#containerSmall table{
+  border-collapse: collapse;
+}
+
+#containerSmall td{
+  border: 1px solid black;
+  height: 25px;
+  width: 25px;
+  text-align: center;
+}
+
+#containerSmall td:first-child {
+  border-left: 5px solid black;
+}
+
+#containerSmall tr:first-child {
+  border-top: 5px solid black;  
+}
+
+#containerSmall td:last-child {
+  border-right: 5px solid black;
+}
+
+#containerSmall tr:last-child {
+  border-bottom: 5px solid black;  
+}
+
+#containerSmall td:nth-child(2n) {
+  border-right: 5px solid black;
+}
+
+#containerSmall tr:nth-child(2n) {
+  border-bottom: 5px solid black;
+}
+
+#container{
+  display: block;
+}
+#container table{
+  border-collapse: collapse;
+}
+#container td{
+  border: 1px solid black;
+  height: 25px;
+  width: 25px;
+  text-align: center;
+}
+#container td:first-child {
+  border-left: 5px solid black;
+}
+#container tr:first-child {
+  border-top: 5px solid black;  
+}
+#container td:last-child {
+  border-right: 5px solid black;
+}
+#container tr:last-child {
+  border-bottom: 5px solid black;  
+}
+
+#container td:nth-child(3n) {
+  border-right: 5px solid black;
+}
+
+#container tr:nth-child(3n) {
+  border-bottom: 5px solid black;
+}
+
+#containerLarge{
+  display: block;
+}
+
+#containerLarge table{
+  border-collapse: collapse;
+}
+
+#containerLarge td{
+  border: 1px solid black;
+  height: 25px;
+  width: 25px;
+  text-align: center;
+}
+
+#containerLarge td:first-child {
+  border-left: 5px solid black;
+}
+
+#containerLarge tr:first-child {
+  border-top: 5px solid black;  
+}
+
+#containerLarge td:last-child {
+  border-right: 5px solid black;
+}
+
+#containerLarge tr:last-child {
+  border-bottom: 5px solid black;  
+}
+
+#containerLarge td:nth-child(4n) {
+  border-right: 5px solid black;
+}
+
+#containerLarge tr:nth-child(4n) {
+  border-bottom: 5px solid black;
+}
+
+/* page */
+#page{
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+.sideBox{
+  width: 33%;
+}
+
+#generateButtons{
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+  height: fit-content;
+  width: 100%;
+}
+
+#generateButtons a{
+  width: 25%;
+  padding: 15px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+#generateButtons a:hover{
+  background-color: #f1f1f1;
+}
+
+/* title bar */
+#title{
+  text-align: center;
+  position: relative;
+  left: 44%;
+}
+
+#titleBar{
+  background-color: deepskyblue;
+  display: flex;
+  padding: 0;
+  justify-content: space-between;
+  align-items: center;
+  border: 2.5px solid black;
+  height: 10%;
+  width: 100%;
+}
+
+/* board and buttons */
+#box{
+  border-top: 5px solid black;
+  border-bottom: 5px solid black;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 175px;
+  height: fit-content;
+  width: 33%;
+}   
+
+.button{
+  height: fit-content;
+  position: relative;
+}
+
+#sudoku{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#parent{
+  height: 100%;
+  width: 100%;
+}
+
+#boardAndButtons{
+  margin-left: auto;
+  margin-right: auto;
+  height: fit-content;
+  width: fit-content;
+}
+
+.groupButtons{
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px; 
+  padding-bottom: 10px;
+}

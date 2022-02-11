@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sudolver</title>
+    <style>
+      body, html{
+        height: 100%;
+        margin: 0;      /* This resets any browser defaults */
+      }
+      #boxContainer{
+        height: 100%;
+        width: 100%;
+      }
+      #container{
+        display: block;
+        margin: auto;
+      }
+      #container table{
+        border-collapse: collapse;
+      }
+      #container td{
+        border: 1px solid black;
+        height: 25px;
+        width: 25px;
+        text-align: center;
+      }
+      #container td:first-child {
+        border-left: 5px solid black;
+      }
+      #container tr:first-child {
+        border-top: 5px solid black;  
+      }
+      #container td:last-child {
+        border-right: 5px solid black;
+      }
+      #container tr:last-child {
+        border-bottom: 5px solid black;  
+      }
+      #container td:nth-child(3n) {
+        border-right: 5px solid black;
+      }
+      #container tr:nth-child(3n) {
+        border-bottom: 5px solid black;
+      }
+      #generateButton{
+        height: fit-content;
+        position: relative;
+        top: 30%;
+        left: 50%;
+      }
+      #checkButton{
+        height: fit-content;
+        position: absolute;
+        bottom: 30%;
+        left: 50.25%;
+      }
+      #parent{
+        border: 5px solid black;
+        display: flex;
+        position: relative;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="parent">
+      <button id="generateButton" type="button" onclick="generatePuzzle()">Generate Puzzle</button>
+      <div id="container"></div>
+      <button id="checkButton" type="button" onclick="check()">Check Solution</button>
+    </div>   
+    <script type="text/javascript">
+      const container = document.getElementById("container");
+      var masterArray = [];
+      var answer = [];
+
+      function makeGrid(rows, columns){                       // function used to make the sudoku grid
+        var table = document.createElement("table");
+        table.id = "sudoku";
+        for (let i = 0; i < rows; i++){
+          var row = table.insertRow(i);
+          for (let j = 0; j < columns; j++){
+            var cell = row.insertCell(j);
+            cell.setAttribute('contenteditable', true);
+          }
+        }
+        container.appendChild(table);
+      } 
+      makeGrid(9, 9);
+
+      function arraysEqual(arr1, arr2) {      // tests to see if the given arrays are the exact same (Order and value)
+        if(arr1.length !== arr2.length){
+          return false;
+        }
+
+        for(var i = arr1.length; i--;) {
+          if(arr1[i] !== arr2[i]){
+            return false;
+          }
+        }   
+        return true;
+      }
+
+      function getCommon(arr1, arr2) {    // Return the common elements
+        var common = [];                   
+        for(var i=0 ; i<arr1.length ; ++i) {
+          for(var j=0 ; j<arr2.length ; ++j) {
+            if(arr1[i] == arr2[j]) {       
+            common.push(arr1[i]);        
+            }
+          }
+        }
+        return common;                     
+      }
+
+      function shuffleArray(arr){       // Shuffles array elements order
+        let len = arr.length;
+
+        while (0 !== len){
+          let random = Math.floor(Math.random() * len);
+          len -= 1;
+
+          let temp = arr[len];
+          arr[len] = arr[random];
+          arr[random] = temp;
+        }
+        return arr;
+      }
+
+      function generatePuzzle() {        // generates puzzles
+        var sudoku = document.getElementById("sudoku");
+        const rowCount = sudoku.rows.length;
+        const colCount = sudoku.rows[0].cells.length;
+
+        var shift = [3, 6];
+        shift = shift[Math.floor(Math.random() * shift.length)];
+
+        var sudokuNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        var shuffSudokuNumbers = shuffleArray(sudokuNumbers);
+      
+
+        for (let i = 0; i < rowCount; i++){
+
+          if (i % 3 == 0 && i !== 0){
+            shuffSudokuNumbers = shuffSudokuNumbers.concat(shuffSudokuNumbers.splice(0, 4));
+          }
+          else if (i !== 0){
+            shuffSudokuNumbers = shuffSudokuNumbers.concat(shuffSudokuNumbers.splice(0, shift));
+          }
+
+          for (let j = 0; j < colCount; j++){
+            var num = shuffSudokuNumbers[j];
+            answer += num;
+            var empty = [0, 1];
+            sudoku.rows[i].cells[j].style.color = 'black';
+
+            if (empty[Math.floor(Math.random() * empty.length)] == 0){
+              sudoku.rows[i].cells[j].innerHTML = num;
+              sudoku.rows[i].cells[j].setAttribute('contenteditable', false);
+            }
+            else{
+              sudoku.rows[i].cells[j].innerHTML = "";
+              sudoku.rows[i].cells[j].setAttribute('contenteditable', true);
+              sudoku.rows[i].cells[j].style.color = 'blue';
+            }
+          }
+        }
+      }
+
+      function check(){         //Checks the players
+        var userInput = [];
+
+        for (let i = 0; i < sudoku.rows.length; i++){
+          for(let j = 0; j < sudoku.rows[0].cells.length; j++){
+            userInput += sudoku.rows[i].cells[j].innerHTML;
+          }
+        }
+
+        var result = arraysEqual(answer, userInput);
+
+        if (result){
+          alert("answer: " + answer + "\n" + "Your Input: " + userInput + "\n" + "Cogratulations!");
+        }
+
+        else{
+          alert("You lost")
+        }
+      }
+
+    </script>
+  </body>
+</html>
