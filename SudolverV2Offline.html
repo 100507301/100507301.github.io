@@ -1,21 +1,297 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sudolver</title>
+    <link rel="stylesheet" href="SudokuSolver_CSS.css">
+  </head>
+  <style>
+    body, html{
+      height: 100%;
+      margin: 0;      /* This resets any browser defaults */
+      padding: 0;
+      background-color: lightgrey;
+    }
+
+    /* Sudoku box */
+    #boxContainer{
+      height: 100%;
+      width: 100%;
+    }
+
+    #containerSmall{
+      display: block;
+    }
+
+    #containerSmall table{
+      border-collapse: collapse;
+    }
+
+    #containerSmall td{
+      border: 1px solid black;
+      height: 25px;
+      width: 25px;
+      text-align: center;
+    }
+
+    #containerSmall td:first-child {
+      border-left: 5px solid black;
+    }
+
+    #containerSmall tr:first-child {
+      border-top: 5px solid black;  
+    }
+
+    #containerSmall td:last-child {
+      border-right: 5px solid black;
+    }
+
+    #containerSmall tr:last-child {
+      border-bottom: 5px solid black;  
+    }
+
+    #containerSmall td:nth-child(2n) {
+      border-right: 5px solid black;
+    }
+
+    #containerSmall tr:nth-child(2n) {
+      border-bottom: 5px solid black;
+    }
+
+    #container{
+      display: block;
+    }
+    #container table{
+      border-collapse: collapse;
+    }
+    #container td{
+      border: 1px solid black;
+      height: 25px;
+      width: 25px;
+      text-align: center;
+    }
+    #container td:first-child {
+      border-left: 5px solid black;
+    }
+    #container tr:first-child {
+      border-top: 5px solid black;  
+    }
+    #container td:last-child {
+      border-right: 5px solid black;
+    }
+    #container tr:last-child {
+      border-bottom: 5px solid black;  
+    }
+
+    #container td:nth-child(3n) {
+      border-right: 5px solid black;
+    }
+
+    #container tr:nth-child(3n) {
+      border-bottom: 5px solid black;
+    }
+
+    #containerLarge{
+      display: block;
+    }
+
+    #containerLarge table{
+      border-collapse: collapse;
+    }
+
+    #containerLarge td{
+      border: 1px solid black;
+      height: 25px;
+      width: 25px;
+      text-align: center;
+    }
+
+    #containerLarge td:first-child {
+      border-left: 5px solid black;
+    }
+
+    #containerLarge tr:first-child {
+      border-top: 5px solid black;  
+    }
+
+    #containerLarge td:last-child {
+      border-right: 5px solid black;
+    }
+
+    #containerLarge tr:last-child {
+      border-bottom: 5px solid black;  
+    }
+
+    #containerLarge td:nth-child(4n) {
+      border-right: 5px solid black;
+    }
+
+    #containerLarge tr:nth-child(4n) {
+      border-bottom: 5px solid black;
+    }
+
+    /* page */
+    #page{
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
+    .sideBox{
+      width: 33%;
+    }
+
+    #generateButtons{
+      display: flex;
+      text-align: center;
+      justify-content: space-between;
+      height: fit-content;
+      width: 100%;
+    }
+
+    #generateButtons a{
+      width: 25%;
+      padding: 15px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    }
+
+    #generateButtons a:hover{
+      background-color: #f1f1f1;
+    }
+
+    /* title bar */
+    #title{
+      text-align: center;
+      position: relative;
+      left: 44%;
+    }
+
+    #titleBar{
+      background-color: deepskyblue;
+      display: flex;
+      padding: 0;
+      justify-content: space-between;
+      align-items: center;
+      border: 2.5px solid black;
+      height: 10%;
+      width: 100%;
+    }
+
+    /* board and buttons */
+    #box{
+      border-top: 5px solid black;
+      border-bottom: 5px solid black;
+      padding: 5px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 175px;
+      height: fit-content;
+      width: 33%;
+    }   
+
+    .button{
+      height: fit-content;
+      position: relative;
+    }
+
+    #sudoku{
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #parent{
+      height: 100%;
+      width: 100%;
+    }
+
+    #boardAndButtons{
+      margin-left: auto;
+      margin-right: auto;
+      height: fit-content;
+      width: fit-content;
+    }
+
+    .groupButtons{
+      height: fit-content;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding-top: 10px; 
+      padding-bottom: 10px;
+    }
+
+  </style>
+  <body>
+    <div id="parent">
+      <div id="titleBar">
+        <!--<button style="float: left"; onclick="offlineMode()">Offline Mode</button>-->
+        <h1 id="title">Sudoku Solver</h1>  
+      </div>
+      <div id="page">
+        <div class="sideBox" style="border-right: 5px solid black; padding-right: 50px;">
+          <h2 style="text-align: center;">Rules of Sudoku</h2>
+          <ol>
+            <li>One number per cell</li>
+            <li>One instance of any one number from 1 - 9 in a row</li>
+            <li>One instance of any one number from 1 - 9 in a column</li>
+            <li>One instance of any one number from 1 - 9 in a 3 x 3 box</li>
+          </ol>
+          <h2 style="text-align: center;"> Rules for this Solver</h2>
+          <ol>
+            <li>Hit the generate button and your chosen difficulty to generate a random Sudoku puzzle of that difficulty</li></br>
+            <li>Click on the cell you wish to change to alter it</li></br>
+            <li>Click on the number you want to put in the selected cell</li></br>
+            <li>When a number is selected it will also highlight the same number across the board</li></br>
+            <li>Click the compare solution button to check your answer against the solution for a randomly generated puzzle</li></br>
+            <li>Click the check button in order to check if an entered puzzle has one unique solution (you can use this on generated puzzles however using the same logic the puzzle will only be printed if there is only one unique solution)</li></br>
+            <li>Click the solve button to print the solution to a generated or an entered puzzle</li></br>
+            <li>You can change the grid size with the puzzle size buttons</li></br>
+          </ol>
+        </div>
+        <div id="box">
+          <div id="boardAndButtons">
+            <div class="groupButtons">
+              <button id="checkButton" class="button" disabled="true" type="button" onclick="checkSolution()">Check Solution</button>
+              <button class="button" type="button" onclick="checkBoard()">Validate Board</button>
+              <button class="button" type="button" onclick="solveSudoku(getBoard())">Solve</button>
+            </div>
+            <div id="container"></div>
+            <div id="numberButtonDiv" class="groupButtons">
+              <button onclick="addNumber(1), disableCheck(1, 9, this)">1</button>
+              <button onclick="addNumber(2), disableCheck(2, 9, this)">2</button>
+              <button onclick="addNumber(3), disableCheck(3, 9, this)">3</button>
+              <button onclick="addNumber(4), disableCheck(4, 9, this)">4</button>
+              <button onclick="addNumber(5), disableCheck(5, 9, this)">5</button>
+              <button onclick="addNumber(6), disableCheck(6, 9, this)">6</button>
+              <button onclick="addNumber(7), disableCheck(7, 9, this)">7</button>
+              <button onclick="addNumber(8), disableCheck(8, 9, this)">8</button>
+              <button onclick="addNumber(9), disableCheck(9, 9, this)">9</button>
+            </div>
+            <button onclick="undo()">Undo</button>
+            <button onclick="reset()">Reset</button>
+            <button style="float: right;" onclick="clearBoard()">Clear Board</button>
+          </div>
+        </div>
+        <div class="sideBox" style="border-left: 5px solid black;">
+          <h2 style="text-align: center;">Generate Puzzles</h2>
+          <div id="generateButtons">
+            <a onclick="generatePuzzle(0)">Easy</a>
+            <a onclick="generatePuzzle(1)">Medium</a>
+            <a onclick="generatePuzzle(2)">Hard</a>
+          </div>
+          <h2 style="text-align: center;">Puzzle Size</h2>
+          <div id="generateButtons">
+            <a onclick="generateGridSize(0)">4 X 4</a>
+            <a onclick="generateGridSize(1)">9 X 9</a>
+            <a onclick="generateGridSize(2)">16 X 16</a>
+          </div>
+        </div>
+      </div>  
+    </div>
+    <script>   
       const container = document.getElementById("container");
       var boardState = [];
       var undoCount = 0;
       var genBoard;
       var printedClueBoard;
-
-      function test(){
-        let puzzle = [[3,0,0,2,0,0,0,0,0],
-[0,0,0,1,0,7,0,0,0],
-[7,0,6,0,3,0,5,0,0],
-[0,7,0,0,0,9,0,8,0],
-[9,0,0,0,2,0,0,0,4],
-[0,1,0,8,0,0,0,5,0],
-[0,0,9,0,4,0,3,0,1],
-[0,0,0,7,0,2,0,0,0],
-[0,0,0,0,0,8,0,0,6]];
-        print(puzzle, 9);
-      }
 
       function clearBoard(){
         var emptyBoard = [];
@@ -60,7 +336,6 @@
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
             ];
         }
-        document.getElementById('checkButton').disabled = true;
         print(emptyBoard, container.firstChild.rows.length);
       }
 
@@ -93,9 +368,27 @@
           numberButton.innerHTML = i;
           numberButton.class = "noButton";
           numberButton.addEventListener("click", function(){addNumber(i)});
+          numberButton.addEventListener("click", function(){disableCheck(i, size, this)});
           buttonDiv.appendChild(numberButton);
+        }        
+      }
+
+      function disableCheck(i, size, numberButton){
+        let board = getBoard();
+        let count = 0;
+
+        for(let x = 0; x < size; x++){
+          for(let y = 0; y < size; y++){
+            if(board[x][y] == i){
+              count++;
+            }
+          }
+        }
+        if(count == size){            
+          numberButton.disabled = true;
         }
       }
+
 
       function makeGrid(rows, columns){                                         // function used to make the sudoku grid
         var table = document.createElement("table");                            // initialises table
@@ -106,6 +399,9 @@
             var cell = row.insertCell(j);   
             cell.setAttribute("clicked", false);                                // adds attribute "clicked" to be used to determine if a cell has been selected
             cell.addEventListener("click", function(){highlight(this)});        // gives each cell the onclick function highlight
+            if(cell.innerHTML == ""){
+              cell.setAttribute('contenteditable', true);
+            }
           }
         }
         while (container.firstChild) {
@@ -249,14 +545,155 @@
         return true;
       }
 
-      function solveSudoku(board, n) {            // solves the given board through the use of backtracking
+      this.tests={backtracks: 0, time: 0};
+      function solveSudoku(puzzleArray) {                   // solves the board on screen through the use of Constraint Propagation
+        var n = puzzleArray.length;                         // gets the length of the board ie. n x n board with n being 4,9 or 16
+        var sqrt = Math.sqrt(n);                            // finds the square root of the length of the board; this is useful for computations regarding the boxes within a Sudoku grid
+        this.tests.time = Date.now();  
+   
+        while(puzzleArray.flat(Infinity).some(function(e){return e == 0})){
+          let state = puzzleArray;
+          puzzleArray = singleValues(puzzleArray);
+          puzzleArray = onlyOption(puzzleArray);
+          if(puzzleArray == state){
+            break;
+          }
+        }
+
+        if(backtrack(puzzleArray)){
+          this.tests.time = Date.now() - this.tests.time;
+          alert(this.tests.time + " ms" + " backtracks: " + this.tests.backtracks);
+          print(puzzleArray, n);  
+          this.tests.backtracks = 0;
+        }
+      }
+
+      function onlyOption(puzzleArray){
+        var allowedValuesArray = allowedValues(puzzleArray);
+        var n = puzzleArray.length;
+
+        for(let row = 0; row < n; row++){
+          let rowValues = allowedValuesArray.filter(function(e){return e.i == row});
+          for(let num = 1; num <= n; num++){
+            let count = 0
+            for(let k = 0; k < rowValues.length; k++){
+              if(rowValues[k].values.includes(num)){
+                count++;
+              }
+            }
+            if(count == 1){
+              let printedValue = rowValues.filter(function(e){return e.values.includes(num)});
+              puzzleArray[printedValue[0].i][printedValue[0].j] = num; 
+            }
+          }   
+        }
+
+        for(let col = 0; col < n; col++){
+          let colValues = allowedValuesArray.filter(function(e){return e.j == col});
+          for(let num = 1; num <= n; num++){
+            let count = 0
+            for(let k = 0; k < colValues.length; k++){
+              if(colValues[k].values.includes(num)){
+                count++;
+              }
+            }
+            if(count == 1){
+              let printedValue = colValues.filter(function(e){return e.values.includes(num)});
+              puzzleArray[printedValue[0].i][printedValue[0].j] = num; 
+            }
+          }   
+        }
+
+        let sqrt = Math.floor(Math.sqrt(n));
+        let rowCount = 0;    
+        for(let row = 0; row < sqrt; row++){
+          let colCount = 0;
+          rowCount++;
+          for(let col = 0; col < sqrt; col++){
+            colCount++;
+            let boxValues = allowedValuesArray.filter(function(e){return row <= e.i <= sqrt * rowCount && col <= e.j <= sqrt * colCount});
+            for(let num = 1; num <= n; num++){
+              let count = 0
+              for(let k = 0; k < boxValues.length; k++){
+                if(boxValues[k].values.includes(num)){
+                  count++;
+                }  
+              }
+              if(count == 1){
+                let printedValue = boxValues.filter(function(e){return e.values.includes(num)});
+                puzzleArray[printedValue[0].i][printedValue[0].j] = num; 
+              }
+            }  
+          }
+        }
+
+        return puzzleArray;
+      }
+
+      function singleValues(puzzleArray){
+        var allowedValuesArray = allowedValues(puzzleArray);
+        var lengths = [];
+        for(let x = 0; x < allowedValuesArray.length; x++){
+          lengths[x] = allowedValuesArray[x].values.length;
+        }
+
+        var singleOption = lengths.some(function(e) {return e == 1});
+        while(singleOption){
+          var lengths = [];
+          for(let x = 0; x < allowedValuesArray.length; x++){
+            lengths[x] = allowedValuesArray[x].values.length;
+            if(allowedValuesArray[x].values.length == 1){
+              puzzleArray[allowedValuesArray[x].i][allowedValuesArray[x].j] = allowedValuesArray[x].values;
+              allowedValuesArray.splice(x, 1);
+            }
+          }
+          allowedValuesArray = allowedValues(puzzleArray);
+          singleOption = lengths.some(function(e) {return e == 1});
+        }
+        return puzzleArray;
+      }
+
+      function allowedValues(puzzleArray){
+        var allowedValuesArray = [];
+        var n = puzzleArray.length;
+        var obj = {};
+        obj["i"];
+        obj["j"];
+        obj["values"] = []; 
+
+        loop1:
+        for(let i = 0; i < n; i++){              // iterates through each cell in the given grid
+          loop2:
+          for(let j = 0; j < n; j++){  
+            if(puzzleArray[i][j] == ""){                // if the cell is empty
+              obj = {};
+              obj["values"] = [];    
+              for(let k = 1; k <= n; k++){              // cycle through the available value, 1 - 4 / 1 - 9 / 1 - 16
+                if(isSafe(puzzleArray, i, j, k)){       // if it is safe store the position and the possible values    
+                  obj["i"] = i;
+                  obj["j"] = j;
+                  obj["values"].push(k);   
+                }
+              }
+              obj["l"] = obj.values.length;
+              allowedValuesArray.push(obj);
+              //break loop1;
+            }
+          }
+        }  
+        return allowedValuesArray;      
+      }
+
+      function backtrack(puzzleArray){
+        var allowedValuesArray = allowedValues(puzzleArray);
+        var n = puzzleArray.length;
         let row = -1;
         let col = -1;
         let isEmpty = true;
 
         for(let i = 0; i < n; i++){
           for(let j = 0; j < n; j++){
-            if (board[i][j] == 0){
+            if (puzzleArray[i][j] == ""){
               row = i;
               col = j;
 
@@ -270,21 +707,19 @@
           }
         }
 
-        if (isEmpty){                                   // if this is true we no longer have any empty space (the puzzle is solved)
+        if(isEmpty){                                   // if this is true we no longer have any empty space (the puzzle is solved)
           return true;
         }
 
-        for(let number = 1; number <= n; number++){     // if the board isnt solved we backtrack
-          if(isSafe(board, row, col, number)){          // we check to make sure the number is valid
-            this.tests.tries++;
-            board[row][col] = number;
-            if(solveSudoku(board, n)){                  // checks to see if the updated board is solved
-              return true;                              // prints the new board
-            }
-            else{
-              this.tests.backtracks++;
-              board[row][col] = 0;                      // if not the number is reset on backtrack
-            }
+        for(let number = 0; number < allowedValuesArray[0].l; number++){     // if the board isnt solved we backtrack
+          puzzleArray[row][col] = allowedValuesArray[0].values[number];
+
+          if(backtrack(puzzleArray)){                  // checks to see if the updated board is solvable
+            return true;                               // returns true so the board can be printed
+          }
+          else{
+            this.tests.backtracks++;
+            puzzleArray[row][col] = "";                      // if not the number is reset on backtrack
           }
         }
         return false;
@@ -303,17 +738,12 @@
         }
 
         for (let number = 1; number <= n && count < 2; ++number){              // searches for 2 solutions and breaks if 2 are found
-          //alert("In for loop");
           if(isSafe(board, row, col, number)){
-            //alert("In if");
             board[row][col] = number;
             count = multipleSolutions(row + 1, col, board, n, count);                 // adds solution
-            //alert("bottom of if");
           }
         }
-        //alert("Out of for loop");
         board[row][col] = 0;                                              // resets on backtrack
-        //alert("Value being returned");
         return count; 
       }
 
@@ -402,7 +832,7 @@
           for(let j = 0; j < N; j++){          
             if(board[i][j] == 0 || board[i][j] == ""){                          // prints the empty cells
               sudoku.rows[i].cells[j].innerHTML = "";
-              sudoku.rows[i].cells[j].setAttribute('contenteditable', false);   // prevents cells being edited
+              sudoku.rows[i].cells[j].setAttribute('contenteditable', true);   // prevents cells being edited
             }
             else{
               sudoku.rows[i].cells[j].innerHTML = board[i][j];                  // prints cells with numbers
@@ -446,7 +876,7 @@
             blanks = [130, 131, 132, 133, 134, 135];                              // medium (130 - 135 blanks)
           }
           else if(difficulty == 2){
-            blanks = [140, 141, 142, 143, 144, 145];                              // hard (150 - 155 blanks)
+            blanks = [150, 151, 152, 153, 154, 155];                              // hard (150 - 155 blanks)
           }
         }
         var puzzleBlanks = blanks[Math.floor(Math.random() * blanks.length)];
@@ -463,25 +893,19 @@
           let x = Math.floor(Math.random() * N);
           let y = Math.floor(Math.random() * N);
           if(sudoku.rows[x].cells[y].innerHTML != ""){
-            var val = sudoku.rows[x].cells[y].innerHTML;
             sudoku.rows[x].cells[y].innerHTML = "";
-            var solutions = multipleSolutions(0, 0, getBoard(), N, 0);
-            if(solutions == 1){
-              sudoku.rows[x].cells[y].setAttribute('contenteditable', false); 
-              count++;
-            }
-            else{
-              sudoku.rows[x].cells[y].innerHTML = val;
-            }            
+            sudoku.rows[x].cells[y].setAttribute('contenteditable', true);
+            sudoku.rows[x].cells[y].style.color = "black";
+            count++;
           }
         }
-        //var clueBoard = getBoard();
-        //printedClueBoard = clueBoard;
-        //var solutions = multipleSolutions(0, 0, clueBoard, N, 0);
-        //if(solutions != 1){
-        //  clueCount++;
-        //  printClues(difficulty, board, N);
-        //}
+        var clueBoard = getBoard();
+        printedClueBoard = clueBoard;
+        var solutions = multipleSolutions(0, 0, clueBoard, N, 0);
+        if(solutions != 1){
+          clueCount++;
+          printClues(difficulty, board, N);
+        }
       }
 
       function getBoard(){                                              // used to get the board in the grid
@@ -505,25 +929,9 @@
         return playerBoard;                                             // returns the new board
       }
 
-      this.tests={tries: 0, backtracks: 0, time: Date.now()};
-      function printBoard(){                    // prints a board
-        var playerInput = getBoard()
-        let N = playerInput.length;
-        this.tests.time = Date.now();
-        
-        if(solveSudoku(playerInput, N)){        // checks to see if there is a solution, if so the board is printed
-          print(playerInput, N);
-          this.tests.time = Date.now() - this.tests.time;
-          alert(this.tests.time + "ms" + " backtracks: " + this.tests.backtracks + " tries: " + this.tests.tries);
-          this.tests.backtracks = 0;
-          this.tests.tries = 0;
-        }
-        else{
-          alert("No solution");
-        }
-      }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       function generatePuzzle(difficulty){                                // generates a new Sudoku puzzle
+        document.getElementById('checkButton').disabled = false;
         var initBoard = [];
         if (container.firstChild.rows.length == 4){
           initBoard = [                                                   // uses an initial 4 x 4 board of all zeros
@@ -575,7 +983,7 @@
           }
           else{
             printClues(difficulty, genBoard, N);             // prints only specified number of the cells
-            alert("Number of tries to print clues: " + clueCount);
+            //alert("Number of tries to print clues: " + clueCount);
           }
         }
       }
@@ -596,7 +1004,7 @@
         if(!isValidCell(currentBoard, currentBoard.length)){
           alert("This is not a valid Sudoku puzzle");
         }
-        multiSolutions(currentBoard, currentBoard.length);
+        return multiSolutions(currentBoard, currentBoard.length);
       }
 
       function checkRow(array, row){      // checks to make sure the rows are valid (no duplicate numbers)
@@ -627,7 +1035,7 @@
 
       function checkBox(array, sRow, sCol){                 // checks to make sure that the boxes have no duplicates from a starting row and column
         let a = new Set();
-        let sqrt = Math.floor(Math.sqrt(array.length))
+        let sqrt = Math.floor(Math.sqrt(array.length));
         for(let row = 0; row < sqrt; row++){
           for(let col = 0; col < sqrt; col++){
             let current = array[row + sRow][col + sCol];    // checks boxes from row 0 column 0 then row 0 column 3 etc
@@ -660,18 +1068,20 @@
 
       function multiSolutions(array, n){      // checks for multiple solutions
         var numberOfSolutions = multipleSolutions(0, 0, array, n, 0);
-        alert(numberOfSolutions);
         if(numberOfSolutions > 1){                // run solve for multiple solutions
           alert("This puzzle has multiple solutions");
-          return 2;
+          return numberOfSolutions;
         }
         else if (numberOfSolutions == 1){
-          alert("This puzzle has a unique solution");
+          //alert("This puzzle has a unique solution");
           return numberOfSolutions;
         }
         else{
           alert("This puzzle has no solutions");
-          return 2;
+          return numberOfSolutions;
         }
         
       }
+    </script>
+  </body>
+</html>

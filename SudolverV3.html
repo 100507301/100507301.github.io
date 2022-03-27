@@ -7,6 +7,7 @@
   <body>
     <div id="parent">
       <div id="titleBar">
+        <button style="position: absolute"; onclick="window.location.href='SudolverV2Offline.html';">Offline Mode</button>
         <h1 id="title">Sudoku Solver</h1>  
       </div>
       <div id="page">
@@ -33,24 +34,26 @@
         <div id="box">
           <div id="boardAndButtons">
             <div class="groupButtons">
-              <button class="button" type="button" onclick="checkSolution()">Compare Solution</button>
-              <button class="button" type="button" onclick="checkBoard()">Check</button>
+              <button id="checkButton" class="button" disabled="true" type="button" onclick="checkSolution()">Check Solution</button>
+              <button class="button" type="button" onclick="checkBoard()">Validate Board</button>
               <button class="button" type="button" onclick="solveSudoku()">Solve</button>
             </div>
             <div id="container"></div>
             <div id="numberButtonDiv" class="groupButtons">
-              <button onclick="addNumber(1)">1</button>
-              <button onclick="addNumber(2)">2</button>
-              <button onclick="addNumber(3)">3</button>
-              <button onclick="addNumber(4)">4</button>
-              <button onclick="addNumber(5)">5</button>
-              <button onclick="addNumber(6)">6</button>
-              <button onclick="addNumber(7)">7</button>
-              <button onclick="addNumber(8)">8</button>
-              <button onclick="addNumber(9)">9</button>
+              <button onclick="addNumber(1), disableCheck(1, 9, this)">1</button>
+              <button onclick="addNumber(2), disableCheck(2, 9, this)">2</button>
+              <button onclick="addNumber(3), disableCheck(3, 9, this)">3</button>
+              <button onclick="addNumber(4), disableCheck(4, 9, this)">4</button>
+              <button onclick="addNumber(5), disableCheck(5, 9, this)">5</button>
+              <button onclick="addNumber(6), disableCheck(6, 9, this)">6</button>
+              <button onclick="addNumber(7), disableCheck(7, 9, this)">7</button>
+              <button onclick="addNumber(8), disableCheck(8, 9, this)">8</button>
+              <button onclick="addNumber(9), disableCheck(9, 9, this)">9</button>
             </div>
             <button onclick="undo()">Undo</button>
             <button onclick="reset()">Reset</button>
+            <button style="float: right;" onclick="clearBoard()">Clear Board</button>
+            <button style="float: right;" onclick="test()">Test</button>
           </div>
         </div>
         <div class="sideBox" style="border-left: 5px solid black;">

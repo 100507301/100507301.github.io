@@ -1,8 +1,68 @@
-const container = document.getElementById("container");
+ const container = document.getElementById("container");
       var boardState = [];
       var undoCount = 0;
       var genBoard;
       var printedClueBoard;
+
+      function test(){
+        let puzzle = [[3,0,0,2,0,0,0,0,0],
+[0,0,0,1,0,7,0,0,0],
+[7,0,6,0,3,0,5,0,0],
+[0,7,0,0,0,9,0,8,0],
+[9,0,0,0,2,0,0,0,4],
+[0,1,0,8,0,0,0,5,0],
+[0,0,9,0,4,0,3,0,1],
+[0,0,0,7,0,2,0,0,0],
+[0,0,0,0,0,8,0,0,6]];
+        print(puzzle, 9);
+      }
+
+      function clearBoard(){
+        var emptyBoard = [];
+        if (container.firstChild.rows.length == 4){
+          emptyBoard = [                                                   // uses an initial 4 x 4 board of all zeros
+            [ 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0 ]
+            ];
+        }
+        else if(container.firstChild.rows.length == 9){
+          emptyBoard = [                                                   // uses an initial 9 x 9 board of all zeros
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ] 
+            ];
+        }
+        else if(container.firstChild.rows.length == 16){
+          emptyBoard = [                                                   // uses an initial 16 x 16 board of all zeros
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+            ];
+        }
+        document.getElementById('checkButton').disabled = true;
+        print(emptyBoard, container.firstChild.rows.length);
+      }
 
       function generateGridSize(size){                        // generates grid of size 'size'
         if(size == 0){
@@ -33,9 +93,27 @@ const container = document.getElementById("container");
           numberButton.innerHTML = i;
           numberButton.class = "noButton";
           numberButton.addEventListener("click", function(){addNumber(i)});
+          numberButton.addEventListener("click", function(){disableCheck(i, size, this)});
           buttonDiv.appendChild(numberButton);
+        }        
+      }
+
+      function disableCheck(i, size, numberButton){
+        let board = getBoard();
+        let count = 0;
+
+        for(let x = 0; x < size; x++){
+          for(let y = 0; y < size; y++){
+            if(board[x][y] == i){
+              count++;
+            }
+          }
+        }
+        if(count == size){            
+          numberButton.disabled = true;
         }
       }
+
 
       function makeGrid(rows, columns){                                         // function used to make the sudoku grid
         var table = document.createElement("table");                            // initialises table
@@ -46,6 +124,9 @@ const container = document.getElementById("container");
             var cell = row.insertCell(j);   
             cell.setAttribute("clicked", false);                                // adds attribute "clicked" to be used to determine if a cell has been selected
             cell.addEventListener("click", function(){highlight(this)});        // gives each cell the onclick function highlight
+            if(cell.innerHTML == ""){
+              cell.setAttribute('contenteditable', true);
+            }
           }
         }
         while (container.firstChild) {
@@ -159,9 +240,9 @@ const container = document.getElementById("container");
             return ele != value; 
         });
       }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function isSafe(board, row, col, n){
+
         for (let i = 0; i < board.length; i++){       // checks to see if the row is safe
           if (board[row][i] == n){                    // checks n against all values in the row
             return false;
@@ -189,6 +270,85 @@ const container = document.getElementById("container");
         return true;
       }
 
+      function adjacencyArray(puzzleArray){
+        var n = puzzleArray.length;
+        var sqrt = Math.floor(Math.sqrt(n));
+        var boardSize = n * n;
+        var adjacencyMatrix = [...Array(boardSize)].map(x => Array(boardSize).fill(0));
+
+        let cellCount = 0;
+        for(let i = 0; i < n; i++){
+          for(let j = 0; j < n; j++){
+            let adjacencyCount = 0;
+            for(let k = 0; k < n; k++){
+              for(let l = 0; l < n; l++){
+                if(k == i || l == j){
+                  if(k == i && l == j){
+                    adjacencyMatrix[cellCount][adjacencyCount] = -1;
+                  }
+                  else if(puzzleArray[k][l] != ""){
+                    adjacencyMatrix[cellCount][adjacencyCount] = puzzleArray[k][l];                  // if the cell is adjacent and contains a number
+                  }
+                  else{
+                    adjacencyMatrix[cellCount][adjacencyCount] = 0;                                   // if the cell is adjacent and does not contain a number
+                  } 
+                }
+                else if(k < sqrt * (Math.floor(i / sqrt) + 1) && l < sqrt * (Math.floor(j / sqrt) + 1) && k >= sqrt * Math.floor(i / sqrt) && l >= sqrt * Math.floor(j / sqrt)){
+                  if(puzzleArray[k][l] != ""){
+                    adjacencyMatrix[cellCount][adjacencyCount] = puzzleArray[k][l];
+                  }
+                  else{
+                    adjacencyMatrix[cellCount][adjacencyCount] = 0;
+                  } 
+                }
+                else{
+                  adjacencyMatrix[cellCount][adjacencyCount] = -1;                                    // if the cell is not adjacent
+                }
+                adjacencyCount++;
+              }
+            }
+            cellCount++;
+          }
+        } 
+
+        return adjacencyMatrix;       
+      }
+
+      function uniqueNum(puzzleArray, adjacencyMatrix){
+        var n = puzzleArray.length;
+        var boardSize = n * n;
+        var uniqueNum = [...Array(boardSize)].map(x => Array(0));
+
+        for(let i = 0; i < adjacencyMatrix.length; i++){
+          let x = Math.floor(i / n);
+          let y = i % n;
+          if(puzzleArray[x][y] == ""){
+            adjacencyMatrix[i].forEach(el =>{
+              if(el != 0 && el != -1 && !uniqueNum[i].includes(Number(el))){
+                uniqueNum[i].push(Number(el));
+              }   
+            });
+
+            //alert(uniqueNum[i]);
+            uniqueNum[i] = uniqueNum[i].length;
+          }
+        }
+        //alert(uniqueNum)
+        uniqueNum.flat(Infinity);
+
+        var mapped = uniqueNum.map(function(el, i) {
+          if (el != 0){
+            return { index: i, value: el };
+          } 
+        });
+
+        mapped.sort(function(a, b) {                                     // sorting the mapped array containing the reduced values
+          return b.value - a.value;
+        });
+
+        return mapped;
+      }
+
       function solveSudoku() {            // solves the given board through the use of backtracking
         // the graph has either 16, 81 or 256 vertices depending on size
         // two distinct vertices are adjacent iff they are in the same row, column or box
@@ -209,155 +369,112 @@ const container = document.getElementById("container");
 
         var initialBoard = getBoard();
         var n = initialBoard.length;
+        var boardSize = n * n;
         var adjacentCells = [];                      // initialise connections for adjacent vertices for blank sudoku grid
         var sqrt = Math.floor(Math.sqrt(n));
+        var adjacencyMatrix = adjacencyArray(initialBoard);
+        var orderedUniqueNum = uniqueNum(initialBoard, adjacencyMatrix);
 
-        if(n == 4){
-          adjacentCells = [[],[],[],[]];
-        }
-        else if(n == 9){
-          adjacentCells = [[],[],[],[],[],[],[],[],[]];
-        }
-        else if(n == 16){
-          adjacentCells = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],];
-        }
+        this.tests={backtracks: 0, time: 0};
+        this.tests.time = Date.now();     
 
-        for (let i = 0; i < n; i++){
-          for (let j = 0; j < n; j++){
-            if (n == 4){
-              adjacentCells[i][j] = 0;          // initialise 4 x 4 grid of zeroes
-            }
-            else if (n == 9){
-              adjacentCells[i][j] = 0;          // initialise 9 x 9 grid of zeroes
+        while(initialBoard.flat(Infinity).includes("")){
+          let state = JSON.parse(JSON.stringify(initialBoard));
+          
+          for(let i = 0; i < orderedUniqueNum.length; i++){
+            if(initialBoard.flat(Infinity).includes("")){
+              if(orderedUniqueNum[i].value == n - 1){
+                let indexI = Math.floor(orderedUniqueNum[i].index / n);
+                let indexJ = orderedUniqueNum[i].index % n;
+
+                for(let j = 1; j <= n; j++){
+                  if(isSafe(initialBoard, indexI, indexJ, j)){
+                    initialBoard[indexI][indexJ] = Number(j);
+                    for(let k = 0; k < adjacencyMatrix[orderedUniqueNum[i].index].length; k++){
+                      if(adjacencyMatrix[orderedUniqueNum[i].index][k] == 0){
+                        adjacencyMatrix[k][orderedUniqueNum[i].index] = j;
+                      }
+                    }
+                  }
+                } 
+              }
+              else{
+                break;
+              }
             }
             else{
-              adjacentCells[i][j] = 0;          // initialise 16 x 16 grid of zeroes
+              break;
             }
+          }
+          if(arraysEqual(initialBoard.flat(Infinity), state.flat(Infinity))){
+            break;
           }
         }
 
-        for (let i = 0; i < n; i++){
-          for (let j = 0; j < n; j++){
-            var isChecked = [];                 
-            if(n == 4){
-              isChecked = [[],[],[],[]];
-            }
-            else if(n == 9){
-              isChecked = [[],[],[],[],[],[],[],[],[]];
-            }
-            else if(n == 16){
-              isChecked = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],];
-            }
+        if(backtrack(initialBoard, adjacencyMatrix)){
+          this.tests.time = Date.now() - this.tests.time;
+          alert(this.tests.time + " ms" + " backtracks: " + this.tests.backtracks);
+          print(initialBoard, n);  
+          this.tests.backtracks = 0;
+        }
+      }
 
-            for (let x = 0; x < n; x++){        // initialise an array of false values in the same format as the Sudoku grid to be used to check if a cell has already been checked    
-              for (let y = 0; y < n; y++){      // this will be used to check which cells have already been checked when the rows and grids were checked. This removes the possibility
-                isChecked[x][y] = false;        // of checking the same cell twice
-              }
-            }
+      function backtrack(puzzleArray, adjacencyMatrix){
+        var orderedUniqueNum = uniqueNum(puzzleArray, adjacencyMatrix);
+        var n = puzzleArray.length;
+        let row = -1;
+        let col = -1;
+        let isEmpty = true;
 
-            let adjacentClueCount = 0;
-            var rowClueCount = 0;
-            var colClueCount = 0;
-            var boxClueCount = 0;
-            if (initialBoard[i][j] == ''){
-              let boxStartRow = i - i % sqrt;
-              let boxStartCol = j - j % sqrt;
-
-              for (let k = 0; k < n; k++){
-                isChecked[i][k] = true;
-                isChecked[k][j] = true;
-
-                if (initialBoard[i][k] != ''){          // Checks how many numbers are in the row the current cell is in
-                  adjacentClueCount++;
-                }
-                if (initialBoard[k][j] != ''){          // Checks how many numbers are in the col the current cell is in
-                  adjacentClueCount++;
-                }
-              }
-
-              for (let row = 0; row < sqrt; row++){     // Checks how many numbers are in the box the current cell is in
-                for (let col = 0; col < sqrt; col++){
-                  if (initialBoard[row + boxStartRow][col + boxStartCol] != ''){
-                    if(isChecked[row + boxStartRow][col + boxStartCol] == false){
-                      adjacentClueCount++;
-                      isChecked[row + boxStartRow][col + boxStartCol] == true;
-                    }     
-                  }
-                }
-              }
-            }
-
-            if(adjacentClueCount != 0){
-              if(n == 4){
-                adjacentCells[i][j] = 7 - adjacentClueCount;
-              }
-              else if(n == 9){
-                adjacentCells[i][j] = 20 - adjacentClueCount;
-              }
-              else if(n == 16){
-                adjacentCells[i][j] = 39 - adjacentClueCount;
-              }
-            }
-
-            //alert(adjacentCells);
-          }   
-        } 
-        // find cell with most adjacent cells that (cells that are clues will be listed as zero)
-
-        var adjacentCells1D = [];
-        let count = 0;
         for(let i = 0; i < n; i++){
           for(let j = 0; j < n; j++){
-            adjacentCells1D[count] = adjacentCells[i][j];
-            count++;
+            if (puzzleArray[i][j] == ""){
+              row = i;
+              col = j;
+
+              isEmpty = false;                          // we still have missing numbers to fill within the grid
+              break;
+            }
+          }
+
+          if(!isEmpty){                                 
+            break;
           }
         }
 
-        var mapped = adjacentCells1D.map(function(el, i) {
-          if (el != 0){
-            return { index: i, value: el };
-          } 
-        })
-       
-        mapped.sort(function(a, b) {                                     // sorting the mapped array containing the reduced values
-          return b.value - a.value;
-        });
-        
-        var result = mapped.map(function(el){                            // container for the resulting order
-          if (el != undefined){
-            return adjacentCells1D[el.index];
-          }          
-        });
+        if(isEmpty){                                   // if this is true we no longer have any empty space (the puzzle is solved)
+          return true;
+        }
 
-        //alert("Result List: " + result);
-        //for(let i = 0; i < mapped.length; i++){
-        //  alert("index: " + mapped[i].index + " " + "value: " + mapped[i].value);
-        //}
+        let indexI = Math.floor(orderedUniqueNum[0].index / n);
+        let indexJ = orderedUniqueNum[0].index % n;
 
-        // fill cell with number (1 ... n)
-        // check Sudoku constraints, if viable fill cell, if not try with next number until it can be filled
-        // find the cell with the next most cells
-        // check if the number can be put in this cell if not skip to the next cell, filling cells that can include the number ignoring ones that cannot
-        // set filled cell adjacent cell value to zero 
-        // repeat from next cell with most adjacent cells with nex number
-        // repeat until all cells are filled
+        for(let number = 1; number <= n ; number++){     // if the board isnt solved we backtrack
+          if(isSafe(puzzleArray, indexI, indexJ, number)){
+            puzzleArray[indexI][indexJ] = number;
 
-        mapped = mapped.filter(function(el){return el != null});
+            for(let k = 0; k < adjacencyMatrix[orderedUniqueNum[0].index].length; k++){
+              if(adjacencyMatrix[orderedUniqueNum[0].index][k] == 0){
+                adjacencyMatrix[k][orderedUniqueNum[0].index] = number;
+              }
+            }
 
-        for(let i = 1; i <= n; i++){                                                   // length of array containing empty cells
-          for(let j = 0; j < mapped.length; j++){ 
-            var index = mapped[j].index;
-            var indexI = Math.floor(index / n);
-            var indexJ = index % n; 
+            if(backtrack(puzzleArray, adjacencyMatrix)){                  // checks to see if the updated board is solvable
+              return true;                               // returns true so the board can be printed
+            }
+            else{
+              this.tests.backtracks++;
+              puzzleArray[indexI][indexJ] = "";                      // if not the number is reset on backtrack
 
-            if(isSafe(initialBoard, indexI, indexJ, i)){
-              initialBoard[indexI][indexJ] = i;
-              //mapped[i] = null;
-              //break;
+              for(let k = 0; k < adjacencyMatrix[orderedUniqueNum[0].index].length; k++){
+                if(adjacencyMatrix[orderedUniqueNum[0].index][k] == 0){
+                  adjacencyMatrix[k][orderedUniqueNum[0].index] = 0;
+                }
+              }
             }
           }
         }
-        print(initialBoard, n);
+        return false;
       }
 
       function mostCommonElement(arr){                                                            // finds most common element in arr (requires 1D array)
@@ -392,17 +509,12 @@ const container = document.getElementById("container");
         }
 
         for (let number = 1; number <= n && count < 2; ++number){              // searches for 2 solutions and breaks if 2 are found
-          //alert("In for loop");
           if(isSafe(board, row, col, number)){
-            //alert("In if");
             board[row][col] = number;
             count = multipleSolutions(row + 1, col, board, n, count);                 // adds solution
-            //alert("bottom of if");
           }
         }
-        //alert("Out of for loop");
         board[row][col] = 0;                                              // resets on backtrack
-        //alert("Value being returned");
         return count; 
       }
 
@@ -491,7 +603,7 @@ const container = document.getElementById("container");
           for(let j = 0; j < N; j++){          
             if(board[i][j] == 0 || board[i][j] == ""){                          // prints the empty cells
               sudoku.rows[i].cells[j].innerHTML = "";
-              sudoku.rows[i].cells[j].setAttribute('contenteditable', false);   // prevents cells being edited
+              sudoku.rows[i].cells[j].setAttribute('contenteditable', true);   // prevents cells being edited
             }
             else{
               sudoku.rows[i].cells[j].innerHTML = board[i][j];                  // prints cells with numbers
@@ -535,7 +647,7 @@ const container = document.getElementById("container");
             blanks = [130, 131, 132, 133, 134, 135];                              // medium (130 - 135 blanks)
           }
           else if(difficulty == 2){
-            blanks = [150, 151, 152, 153, 154, 155];                              // hard (150 - 155 blanks)
+            blanks = [140, 141, 142, 143, 144, 145];                              // hard (150 - 155 blanks)
           }
         }
         var puzzleBlanks = blanks[Math.floor(Math.random() * blanks.length)];
@@ -552,18 +664,26 @@ const container = document.getElementById("container");
           let x = Math.floor(Math.random() * N);
           let y = Math.floor(Math.random() * N);
           if(sudoku.rows[x].cells[y].innerHTML != ""){
+            var val = sudoku.rows[x].cells[y].innerHTML;
             sudoku.rows[x].cells[y].innerHTML = "";
-            sudoku.rows[x].cells[y].setAttribute('contenteditable', false);
-            count++;
+            var solutions = multipleSolutions(0, 0, getBoard(), N, 0);
+            if(solutions == 1){
+              sudoku.rows[x].cells[y].setAttribute('contenteditable', false); 
+              count++;
+            }
+            else{
+              sudoku.rows[x].cells[y].innerHTML = val;
+            }            
           }
         }
+
         var clueBoard = getBoard();
         printedClueBoard = clueBoard;
-        var solutions = multipleSolutions(0, 0, clueBoard, N, 0);
-        if(solutions != 1){
-          clueCount++;
-          printClues(difficulty, board, N);
-        }
+        //var solutions = multipleSolutions(0, 0, clueBoard, N, 0);
+        //if(solutions != 1){
+          //clueCount++;
+          //printClues(difficulty, board, N);
+        //}
       }
 
       function getBoard(){                                              // used to get the board in the grid
@@ -587,19 +707,9 @@ const container = document.getElementById("container");
         return playerBoard;                                             // returns the new board
       }
 
-      function printBoard(){                    // prints a board
-        var playerInput = getBoard()
-        let N = playerInput.length;
-        
-        if(solveSudoku(playerInput, N)){        // checks to see if there is a solution, if so the board is printed
-          print(playerInput, N);
-        }
-        else{
-          alert("No solution");
-        }
-      }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       function generatePuzzle(difficulty){                                // generates a new Sudoku puzzle
+        document.getElementById('checkButton').disabled = false;
         var initBoard = [];
         if (container.firstChild.rows.length == 4){
           initBoard = [                                                   // uses an initial 4 x 4 board of all zeros
@@ -672,7 +782,14 @@ const container = document.getElementById("container");
         if(!isValidCell(currentBoard, currentBoard.length)){
           alert("This is not a valid Sudoku puzzle");
         }
-        multiSolutions(currentBoard, currentBoard.length);
+        var result = multiSolutions(currentBoard, currentBoard.length)
+        if(result != 1){
+          alert("This is not a valid board");
+        }
+        else{
+          alert("This is a valid board");
+        }
+        return result;
       }
 
       function checkRow(array, row){      // checks to make sure the rows are valid (no duplicate numbers)
@@ -703,7 +820,7 @@ const container = document.getElementById("container");
 
       function checkBox(array, sRow, sCol){                 // checks to make sure that the boxes have no duplicates from a starting row and column
         let a = new Set();
-        let sqrt = Math.floor(Math.sqrt(array.length))
+        let sqrt = Math.floor(Math.sqrt(array.length));
         for(let row = 0; row < sqrt; row++){
           for(let col = 0; col < sqrt; col++){
             let current = array[row + sRow][col + sCol];    // checks boxes from row 0 column 0 then row 0 column 3 etc
@@ -736,18 +853,17 @@ const container = document.getElementById("container");
 
       function multiSolutions(array, n){      // checks for multiple solutions
         var numberOfSolutions = multipleSolutions(0, 0, array, n, 0);
-        alert(numberOfSolutions);
         if(numberOfSolutions > 1){                // run solve for multiple solutions
           alert("This puzzle has multiple solutions");
-          return 2;
+          return numberOfSolutions;
         }
         else if (numberOfSolutions == 1){
-          alert("This puzzle has a unique solution");
+          //alert("This puzzle has a unique solution");
           return numberOfSolutions;
         }
         else{
           alert("This puzzle has no solutions");
-          return 2;
+          return numberOfSolutions;
         }
         
       }
